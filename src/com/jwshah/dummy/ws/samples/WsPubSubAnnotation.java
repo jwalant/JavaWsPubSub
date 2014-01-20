@@ -6,24 +6,31 @@ import java.nio.ByteBuffer;
 import javax.websocket.OnMessage;
 import javax.websocket.PongMessage;
 import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/websocket/pubsub")
+import com.jwshah.dummy.ws.samples.pubsub.PublicationsManager;
+
+@ServerEndpoint("/websocket/subscribe/{topic}")
 public class WsPubSubAnnotation {
 
     @OnMessage
-    public void echoTextMessage(Session session, String msg, boolean last) {
-        try {
+    public void echoTextMessage(Session session, String msg,  @PathParam("topic") String topic) {
+        {
             if (session.isOpen()) {
-                session.getBasicRemote().sendText(msg, last);
+            	if(topic!=null && !topic.trim().isEmpty()){
+	            	System.out.println("We have a clinet for: " + topic);
+	            	PublicationsManager.getInstance().onSubscribe(session);
+            	}
+            	else{
+            		try {
+						session.getBasicRemote().sendText("Please use a valid topic name to subscribe");
+					} catch (IOException e) {
+						//Ignore topic was null anyways cannot do much about this client
+					}
+            	}
             }
-        } catch (IOException e) {
-            try {
-                session.close();
-            } catch (IOException e1) {
-                // Ignore
-            }
-        }
+        } 
     }
 
     @OnMessage

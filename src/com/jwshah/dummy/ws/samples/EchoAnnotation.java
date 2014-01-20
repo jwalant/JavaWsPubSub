@@ -1,27 +1,37 @@
 package com.jwshah.dummy.ws.samples;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import javax.websocket.OnMessage;
-import javax.websocket.PongMessage;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/websocket/echoAnnotation")
+import com.jwshah.dummy.ws.samples.pubsub.PublicationsManager;
+
+@ServerEndpoint("/websocket/publish")
 public class EchoAnnotation {
 
     @OnMessage
-    public void echoTextMessage(Session session, String msg, boolean last) {
-        try {
+    public void echoTextMessage(Session session, String msg) {
+       {
             if (session.isOpen()) {
-                session.getBasicRemote().sendText(msg, last);
-            }
-        } catch (IOException e) {
-            try {
-                session.close();
-            } catch (IOException e1) {
-                // Ignore
+            	String topicId = null;
+            	
+            	try{
+            		topicId = (session.getRequestParameterMap().get("topic")==null) ? null : session.getRequestParameterMap().get("topic").get(0);
+            		if(topicId != null){
+            			System.out.println("We have a client for: " + topicId);
+                		msg = topicId + ":::" + msg;
+                		PublicationsManager.getInstance().onPublish(session, msg);
+                	}
+            		else{
+            			msg = "Not  A Valid Topic..."; 
+            		}
+            	}
+            	catch(Exception e){
+            		msg = "Not  A Valid Topic...";
+            	}
+            	
             }
         }
     }
@@ -29,27 +39,8 @@ public class EchoAnnotation {
     @OnMessage
     public void echoBinaryMessage(Session session, ByteBuffer bb,
             boolean last) {
-        try {
-            if (session.isOpen()) {
-                session.getBasicRemote().sendBinary(bb, last);
-            }
-        } catch (IOException e) {
-            try {
-                session.close();
-            } catch (IOException e1) {
-                // Ignore
-            }
-        }
+  
     }
 
-    /**
-     * Process a received pong. This is a NO-OP.
-     *
-     * @param pm    Ignored.
-     */
-    @OnMessage
-    public void echoPongMessage(PongMessage pm) {
-        // NO-OP
-    }
 }
 
