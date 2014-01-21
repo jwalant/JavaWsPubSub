@@ -19,6 +19,11 @@ public class Publication {
 	public CopyOnWriteArraySet<Session> getSubsribers() {
 		return subsribers;
 	}
+	
+	Publication(String topic){
+		this.topic = topic;
+	}
+	
 	/**
 	 * @param subsribers the subsribers to set
 	 */
@@ -53,7 +58,8 @@ public class Publication {
 			try {
 				e.getBasicRemote().sendText(message.toString());
 				System.out.println("Send Succes: Time Taken:" + (System.currentTimeMillis() - start) + " ms");
-			} catch (IOException e1) {
+			} 
+			catch (IOException e1) {
 				System.out.println("A user for " + e.getRequestParameterMap().get("topicId").get(0) + " left.... ");
 				this.removeSub(e);
 				System.out.println("Send Error: Time Taken:" + (System.currentTimeMillis() - start) + " ms" +e1.getLocalizedMessage());

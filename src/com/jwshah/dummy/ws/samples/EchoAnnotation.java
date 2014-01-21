@@ -3,6 +3,7 @@ package com.jwshah.dummy.ws.samples;
 import java.nio.ByteBuffer;
 
 import javax.websocket.OnMessage;
+import javax.websocket.PongMessage;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
@@ -12,7 +13,7 @@ import com.jwshah.dummy.ws.samples.pubsub.PublicationsManager;
 public class EchoAnnotation {
 
     @OnMessage
-    public void echoTextMessage(Session session, String msg) {
+    public void echoTextMessage(Session session, String msg, boolean last) {
        {
             if (session.isOpen()) {
             	String topicId = null;
@@ -40,6 +41,16 @@ public class EchoAnnotation {
     public void echoBinaryMessage(Session session, ByteBuffer bb,
             boolean last) {
   
+    }
+    
+    /**
+     * Process a received pong. This is a NO-OP.
+     *
+     * @param pm    Ignored.
+     */
+    @OnMessage
+    public void echoPongMessage(PongMessage pm) {
+        // NO-OP
     }
 
 }

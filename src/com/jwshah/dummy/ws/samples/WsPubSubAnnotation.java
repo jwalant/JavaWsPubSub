@@ -20,8 +20,8 @@ public class WsPubSubAnnotation {
             if (session.isOpen()) {
             	if(topic!=null && !topic.trim().isEmpty()){
 	            	System.out.println("We have a clinet for: " + topic);
-	            	PublicationsManager.getInstance().onSubscribe(session);
-            	}
+	            	PublicationsManager.getInstance().onSubscribe(session,topic.trim());
+	             }
             	else{
             		try {
 						session.getBasicRemote().sendText("Please use a valid topic name to subscribe");

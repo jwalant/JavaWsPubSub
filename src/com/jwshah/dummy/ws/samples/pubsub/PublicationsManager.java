@@ -35,7 +35,7 @@ public class PublicationsManager {
 	/**Publish method should call this**/
 	private Publication addAndReturnPublisher(String topic){
 		if(topic!=null && !topic.isEmpty()){
-			publicationsMap.putIfAbsent(topic, new Publication());
+			publicationsMap.putIfAbsent(topic, new Publication(topic));
 			return publicationsMap.get(topic);
 		}
 		else{
@@ -47,7 +47,7 @@ public class PublicationsManager {
 		if(this.getTopicFromSession(e)!=null){
 			Publication p = this.addAndReturnPublisher(this.getTopicFromSession(e));
 			try {
-				e.getBasicRemote().flushBatch();
+//				e.getBasicRemote().flushBatch();
 				e.getBasicRemote().sendText("Publisher Registered... for " + this.getTopicFromSession(e));
 				ArrayList<String> messages = new ArrayList<String>();
 				messages.add(msg);
@@ -63,17 +63,21 @@ public class PublicationsManager {
 	}
 	
 	public void onSubscribe(Session e){
-		if(this.getTopicFromSession(e)!=null){
-			Publication p = this.addAndReturnPublisher(this.getTopicFromSession(e));
+		onSubscribe(e,this.getTopicFromSession(e));
+		
+	}
+	
+	public void onSubscribe(Session e, String topic){
+		if(topic!=null && !topic.isEmpty()){
+			Publication p = this.addAndReturnPublisher(topic);
 			try {
-				e.getBasicRemote().sendText("Subscribing to Topic..." + this.getTopicFromSession(e));
+				e.getBasicRemote().sendText("Subscribing to Topic..." + topic);
 				p.addSubsribers(e);
 			} catch (IOException e1) {
 				System.out.println("Error communicating with subsriber @ " + e.getQueryString());
 				e1.printStackTrace();
 			}
 		}
-		
 	}
 	public String getTopicFromSession(Session session){
 		return (session.getRequestParameterMap().get("topic")==null) ? null : session.getRequestParameterMap().get("topic").get(0);
