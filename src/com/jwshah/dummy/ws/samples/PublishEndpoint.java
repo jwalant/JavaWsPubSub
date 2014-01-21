@@ -10,7 +10,7 @@ import javax.websocket.server.ServerEndpoint;
 import com.jwshah.dummy.ws.samples.pubsub.PublicationsManager;
 
 @ServerEndpoint("/websocket/publish")
-public class EchoAnnotation {
+public class PublishEndpoint {
 
     @OnMessage
     public void echoTextMessage(Session session, String msg, boolean last) {

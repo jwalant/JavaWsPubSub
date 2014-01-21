@@ -12,7 +12,7 @@ import javax.websocket.server.ServerEndpoint;
 import com.jwshah.dummy.ws.samples.pubsub.PublicationsManager;
 
 @ServerEndpoint("/websocket/subscribe/{topic}")
-public class WsPubSubAnnotation {
+public class SubscribeEndpoint {
 
     @OnMessage
     public void echoTextMessage(Session session, String msg,  @PathParam("topic") String topic) {
