@@ -47,7 +47,6 @@ public class PublicationsManager {
 		if(this.getTopicFromSession(e)!=null){
 			Publication p = this.addAndReturnPublisher(this.getTopicFromSession(e));
 			try {
-//				e.getBasicRemote().flushBatch();
 				e.getBasicRemote().sendText("Publisher Registered... for " + this.getTopicFromSession(e));
 				ArrayList<String> messages = new ArrayList<String>();
 				messages.add(msg);
