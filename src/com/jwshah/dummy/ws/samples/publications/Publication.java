@@ -1,4 +1,4 @@
-package com.jwshah.dummy.ws.samples.pubsub;
+package com.jwshah.dummy.ws.samples.publications;
 import javax.websocket.Session;
 
 import java.io.IOException;

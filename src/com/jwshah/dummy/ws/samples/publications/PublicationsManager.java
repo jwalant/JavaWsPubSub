@@ -1,4 +1,4 @@
-package com.jwshah.dummy.ws.samples.pubsub;
+package com.jwshah.dummy.ws.samples.publications;
 
 import java.io.IOException;
 import java.util.ArrayList;
